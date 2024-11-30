@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from api.user.serializers import UserSerializer
 from api.user.models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth.models import update_last_login
+from api.user.serializers import UserSerializer
 
 class RegisterSerializer(UserSerializer):
     """
@@ -14,12 +18,7 @@ class RegisterSerializer(UserSerializer):
         fields = ['id', 'bio', 'avatar', 'email','username', 'first_name', 'last_name','password']
         def create(self, validated_data):
             return User.objects.create_user(**validated_data)
-        
-
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.settings import api_settings
-from django.contrib.auth.models import update_last_login
-from api.user.serializers import UserSerializer
+    
 
 class LoginSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):

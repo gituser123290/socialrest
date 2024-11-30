@@ -1,11 +1,14 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from api.abstract.viewsets import AbstractViewSet
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from api.post.models import Post
 from api.post.serializers import PostSerializer
 
 class PostViewSet(AbstractViewSet):
-    http_method_names = ('post', 'get')
+    http_method_names = ('post', 'get', 'put', 'delete')
     permission_classes = (IsAuthenticated,)
     serializer_class = PostSerializer
     def get_queryset(self):
@@ -22,19 +25,35 @@ class PostViewSet(AbstractViewSet):
         self.perform_create(serializer)
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     
+    @action(methods=['post'], detail=True)
+    def like(self, request, *args, **kwargs):
+        post = self.get_object()
+        user = self.request.user
+        user.like(post)
+        serializer = self.serializer_class(post)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+    @action(methods=['post'], detail=True)
+    def remove_like(self, request, *args, **kwargs):
+        post = self.get_object()
+        user = self.request.user
+        user.remove_like(post)
+        serializer = self.serializer_class(post)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
     
 
-class UserPermission(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.user.is_anonymous:
-            return request.method in SAFE_METHODS
-        if view.basename in ["post"]:
-            return bool(request.user and request.user.is_authenticated)
-        return False
+# class UserPermission(BasePermission):
+#     def has_object_permission(self, request, view, obj):
+#         if request.user.is_anonymous:
+#             return request.method in SAFE_METHODS
+#         if view.basename in ["post"]:
+#             return bool(request.user and request.user.is_authenticated)
+#         return False
     
-    def has_permission(self, request, view):
-        if view.basename in ["post"]:
-            if request.user.is_anonymous:
-                return request.method in SAFE_METHODS
-            return bool(request.user and request.user.is_authenticated)
-        return False
+#     def has_permission(self, request, view):
+#         if view.basename in ["post"]:
+#             if request.user.is_anonymous:
+#                 return request.method in SAFE_METHODS
+#             return bool(request.user and request.user.is_authenticated)
+#         return False
