@@ -8,10 +8,8 @@ from api.post.models import Post
 
 
 class CommentSerializer(AbstractSerializer):
-    author = serializers.SlugRelatedField(
-    queryset=User.objects.all(), slug_field='public_id')
-    post = serializers.SlugRelatedField(
-    queryset=Post.objects.all(), slug_field='public_id')
+    author = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='public_id')
+    post = serializers.SlugRelatedField(queryset=Post.objects.all(), slug_field='public_id')
     
     def to_representation(self, instance):
         rep = super().to_representation(instance)

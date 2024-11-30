@@ -1,6 +1,6 @@
 import axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import  getAccessToken  from "../hooks/user.actions";
+import  getAccessToken from "../hooks/user.actions";
 import  getRefreshToken from "../hooks/user.actions";
 
 const axiosService = axios.create({
@@ -24,7 +24,7 @@ axiosService.interceptors.response.use(
 
 const refreshAuthLogic = async (failedRequest) => {
     // const { refresh } =JSON.parse(localStorage.getItem("auth"));
-    return axios.post("/refresh/token/", null, {
+    return axios.post("/auth/refresh/", null, {
         baseURL: "http://localhost:8000",
         headers: {
             Authorization: `Bearer ${getRefreshToken()}`,
@@ -46,5 +46,12 @@ createAuthRefreshInterceptor(axiosService,refreshAuthLogic);
 export function  fetcher(url) {
     return axiosService.get(url).then((res) => res.data);
 }
+// export const fetcher = async (url) => {
+//     const res = await fetch(url);
+//     if (!res.ok) {
+//       throw new Error('Failed to fetch data');
+//     }
+//     return res.json();
+//   };
 
 export default axiosService;

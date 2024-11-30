@@ -4,6 +4,7 @@ import getUser from "../hooks/user.actions";
 
 function ProtectedRoute({ children }) {
     const user = getUser();
+    console.log(user);
     return user ? <>{children}</> : <Navigate to="/login/" />;
 }
 export default ProtectedRoute;
