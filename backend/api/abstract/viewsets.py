@@ -1,8 +1,6 @@
 from rest_framework import viewsets
-from rest_framework import filters
-
+from django.utils.translation import gettext_lazy as _
 
 class AbstractViewSet(viewsets.ModelViewSet):
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['updated', 'created']
-    ordering = ['-updated']
+    ordering_fields = ["updated", "created"]
+    ordering = ["-updated"]

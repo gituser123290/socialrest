@@ -1,6 +1,6 @@
 from django.db import models
 from api.abstract.models import AbstractModel,AbstractManager
-
+from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 class PostManager(AbstractManager):
@@ -13,5 +13,3 @@ class Post(AbstractModel):
     objects = PostManager()
     def __str__(self):
         return f"{self.author.name}"
-    class Meta:
-        db_table = 'api.post'

@@ -1,6 +1,6 @@
 from django.db import models
 from api.abstract.models import AbstractModel, AbstractManager
-
+from django.utils.translation import gettext_lazy as _
 class CommentManager(AbstractManager):
     pass
 
